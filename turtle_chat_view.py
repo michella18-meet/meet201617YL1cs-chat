@@ -55,6 +55,8 @@ class TextBox(TextInput):
     def write_msg(self):
         self.writer.clear()
         self.writer.write(self.new_msg)
+        
+        
 
 
 #####################################################################################
@@ -64,8 +66,8 @@ class TextBox(TextInput):
 #                                  SendButton                                       #
 #####################################################################################
 class SendButton(Button):
-     def __init__(self):
-         super(SendButton,self).__init__(pos=(0,-150))
+     def __init__(self,my_turtle=None,shape=None,pos=(0,0),view=None,):
+         super(SendButton,self).__init__(my_turtle=None,shape=None,pos=(0,-150)
          self.view=view
      def fun(self,x=None,y=None):
          self.view.send_msg()
@@ -130,6 +132,11 @@ class View:
         #or at the end of the list using
         #   self.msg_queue.append(a_msg_string)
         self.msg_queue=[]
+        self.me=turtle.clone()
+        self.me.penup()
+        self.me.goto(-100,150)
+        partner=turtle.clone()
+        partner.goto(-100,130)
 
         ###
         #Create one turtle object for each message to display.
@@ -144,8 +151,10 @@ class View:
         #Store them inside of this instance
         ###
 
-        TB=TextBox()
-        SB=SendButton()
+        self.TextBox=TextBox()
+        self.send_btn=SendButton(view=self)
+        self.setup_listeners()
+       
 
         ###
         #Call your setup_listeners() function, if you have one,
@@ -195,12 +204,17 @@ class View:
         '''
         print(msg) #Debug - print message
         show_this_msg=self.partner_name+' says:\r'+ msg
+        self.msg_queue.insert(0,msg)
         #Add the message to the queue either using insert (to put at the beginning)
         #or append (to put at the end).
         #
         #Then, call the display_msg method to update the display
+        self.display_msg()
+        
 
     def display_msg(self):
+        self.me.clear()
+        self.me.write(self.msg_queue[0])
         '''
         This method should update the messages displayed in the screen.
         You can get the messages you want from self.msg_queue
