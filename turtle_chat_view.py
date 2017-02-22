@@ -11,7 +11,8 @@
 #####################################################################################
 import turtle  #import the turtle module
 from turtle_chat_client import Client #import the Client class from the turtle_chat_client module
-from turtle_chat_widgets import Button, TextInput #Finally, from the turtle_chat_widgets module, import two classes: Button and TextInput
+from turtle_chat_widgets import Button
+from turtle_chat_widgets import TextInput #Finally, from the turtle_chat_widgets module, import two classes: Button and TextInput
 #####################################################################################
 #####################################################################################
 
@@ -42,7 +43,8 @@ from turtle_chat_widgets import Button, TextInput #Finally, from the turtle_chat
 #   \r to your string.  Test it out at the Python shell for practice
 class TextBox(TextInput):
     def draw_box(self):
-        self.draw = turtle.clone()
+        self.draw=turtle.clone()
+        self.draw.penup()
         self.draw.hideturtle()
         self.draw.penup()
         self.draw.goto(self.width/2,0)
@@ -66,7 +68,7 @@ class TextBox(TextInput):
 #                                  SendButton                                       #
 #####################################################################################
 class SendButton(Button):
-     def __init__(self,my_turtle=None,shape=None,pos=(0,0),view=None,):
+     def __init__(self,my_turtle=None,shape=None,pos=(0,0),view=None):
          super(SendButton,self).__init__(my_turtle=None,shape=None,pos=(0,-150)
          self.view=view
      def fun(self,x=None,y=None):
@@ -132,11 +134,17 @@ class View:
         #or at the end of the list using
         #   self.msg_queue.append(a_msg_string)
         self.msg_queue=[]
+        self.turtle_list=[]
         self.me=turtle.clone()
         self.me.penup()
-        self.me.goto(-100,150)
+        self.me.goto(-100,120)
         partner=turtle.clone()
-        partner.goto(-100,130)
+        partner.penup()
+        partner.goto(-100,150)
+        self.msg_queue.append(self.me)
+        self.msg_queue.append(partner)
+                                         
+     
 
         ###
         #Create one turtle object for each message to display.
@@ -144,8 +152,7 @@ class View:
         #and write messages for each
         ###
 
-        self.turtle_clone=turtle.clone()
-
+    
         ###
         #Create a TextBox instance and a SendButton instance and
         #Store them inside of this instance
@@ -181,6 +188,8 @@ class View:
         return self.textbox.get_msg()
 
     def setup_listeners(self):
+
+    
         '''
         Set up send button - additional listener, in addition to click,
         so that return button will send a message.
